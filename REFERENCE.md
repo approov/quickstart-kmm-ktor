@@ -35,7 +35,7 @@ This initializes the Approov SDK and thus enables the Approov features. The `con
 On Android:
 
 ```Kotlin
-ApproovService.initialize(Context: applicationContext, config)
+void initialize(Context context, String config)
 ```
 
 The [application context](https://developer.android.com/reference/android/content/Context#getApplicationContext()) must be provided using the `context` parameter.
@@ -46,7 +46,7 @@ On iOS:
 public static func initialize(_ config: String, error: NSErrorPointer)
 ```
 
-This provides an `NSError` if the precheck failed. This will likely require network access so may take some time to complete, and should not be called from the UI thread.
+This provides an `NSError` if the initialization fails.
 
 ## GetOkHttpClient (Android Only)
 Gets the `OkHttpClient` that enables the Approov service. This adds the Approov token in a header to requests, performs and header or query parameter substitutions and also pins the connections. The `OkHttpClient` is constructed lazily on demand but is cached if there are no changes. You *MUST* always obtain the `OkHttpClient` using this method for all requests, to ensure an up to date client is used with the latest dynamic pins.
@@ -220,7 +220,7 @@ public static func prefetch()
 ```
 
 ## Precheck
-Performs a precheck to determine if the app will pass attestation. This requires [secure strings](https://approov.io/docs/latest/approov-usage-documentation/#secure-strings) to be enabled for the account, although no strings need to be set up. This will likely require network access so may take some time to complete.
+Performs a precheck to determine if the app will pass attestation. This requires [secure strings](https://approov.io/docs/latest/approov-usage-documentation/#secure-strings) to be enabled for the account, although no strings need to be set up. This will likely require network access so may take some time to complete, and should not be called from the UI thread.
 
 On Android:
 
@@ -229,7 +229,7 @@ On Android:
 void precheck()
 ```
 
-This throws `ApproovException` if the precheck failed. This will likely require network access so may take some time to complete, and should not be called from the UI thread.
+This throws `ApproovException` if the precheck failed.
 
 On iOS:
 
@@ -237,7 +237,7 @@ On iOS:
 public static func precheck(_ error: NSErrorPointer)
 ```
 
-This provides an `NSError` if the precheck failed. This will likely require network access so may take some time to complete, and should not be called from the UI thread.
+This provides an `NSError` if the precheck failed.
 
 ## GetDeviceID
 Gets the [device ID](https://approov.io/docs/latest/approov-usage-documentation/#extracting-the-device-id) used by Approov to identify the particular device that the SDK is running on. Note that different Approov apps on the same device will return a different ID. Moreover, the ID may be changed by an uninstall and reinstall of the app.
@@ -278,7 +278,7 @@ public static func setDataHashInToken(_ data: String)
 ```
 
 ## FetchToken
-Performs an Approov token fetch for the given `url`. This should be used in situations where it is not possible to use the networking interception to add the token. This will likely require network access so may take some time to complete.
+Performs an Approov token fetch for the given `url`. This should be used in situations where it is not possible to use the networking interception to add the token. This will likely require network access so may take some time to complete, and should not be called from the UI thread.
 
 On Android:
 
@@ -293,7 +293,7 @@ On iOS:
 public static func fetchToken(_ url: String) throws -> String
 ```
 
-This throws `ApproovException` (Android) or `NSError` (iOS) if there was a problem obtaining the token. This may require network access so may take some time to complete, and should not be called from the UI thread.
+This throws `ApproovException` (Android) or `NSError` (iOS) if there was a problem obtaining the token.
 
 ## GetMessageSignature
 Gets the [message signature](https://approov.io/docs/latest/approov-usage-documentation/#message-signing) for the given `message`. This uses an account specific message signing key that is transmitted to the SDK after a successful fetch if the facility is enabled for the account. Note that if the attestation failed then the signing key provided is actually random so that the signature will be incorrect. An Approov token should always be included in the message being signed and sent alongside this signature to prevent replay attacks.
@@ -349,4 +349,4 @@ On iOS:
 public static func fetchCustomJWT(_ payload: String) throws -> String
 ```
 
-This throws `ApproovException` (Android) or `NSError` (iOS) if there was a problem obtaining the custom JWT. This may require network access so may take some time to complete, and should not be called from the UI thread.
+This throws `ApproovException` (Android) or `NSError` (iOS) if there was a problem obtaining the custom JWT. This will require network access so may take some time to complete, and should not be called from the UI thread.

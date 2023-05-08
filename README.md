@@ -144,7 +144,7 @@ This provides a Ktor `HttpClient` that is specifically based on the `OkHttp` eng
 
 The iOS implementation is a little more complex than Android, since there is a need to pass a custom `NSURLSession` into the shared layer from the app, which itself must use a Kotlin supplied session delegate object.
 
-You must ensure the `OkHttp` based Ktor engine is installed in the `shared/build.gradle.kts` as follows:
+You must ensure the `Darwin` based Ktor engine is installed in the `shared/build.gradle.kts` as follows:
 
 ```
 val iosMain by ... {

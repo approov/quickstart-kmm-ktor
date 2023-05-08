@@ -24,13 +24,13 @@ You will see two buttons:
     <img src="readme-images/app-startup.png" width="256" title="Shapes App Startup">
 </p>
 
-Click on the `Say Hello` button and you should see this:
+Click on the `Hello` button and you should see this:
 
 <p>
     <img src="readme-images/hello-okay.png" width="256" title="Hello Okay">
 </p>
 
-This checks the connectivity by connecting to the endpoint `https://shapes.approov.io/v1/hello`. Now press the `Get Shape` button and you will see this (or a different shape):
+This checks the connectivity by connecting to the endpoint `https://shapes.approov.io/v1/hello`. Now press the `Shape` button and you will see this (or a different shape):
 
 <p>
     <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">
@@ -81,6 +81,8 @@ After creating or updating your `Podfile`, change the directory to `iosApp` in y
 pod install
 ```
 
+You can ignore any warnings about `FRAMEWORK_SEARCH_PATHS`.
+
 Note that once the pods have been installed you should open the Xcode project using the generated `iosApp.xcworkspace` as this contains the generated configuration for the pods. 
 
 ## ENSURE THE SHAPES API IS ADDED
@@ -117,6 +119,8 @@ In the file `iosApp/iosApp/ContentView.swift` uncomment the line that imports `a
 
 Now run the app again on your chosen platform, using the previous instructions, to ensure that the generated build outputs are up to date.
 
+> **IMPORTANT:** The registration takes around 30 seconds to propagate across the Approov Cloud Infrastructure, therefore don't try to run the app again before this time has elapsed. During development of your app you can ensure it [always passes](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy) on your device to not have to register the app each time you modify it.
+
 ### Android
 
 You should build the APK using `Build -> Build Bundle(s) / APK(s) -> Build APK(s)` in Android Studio. Follow the `locate` link in the dialog that pops up when the buid is complete. Find the path of the generated APK (which may be called `androidApp-debug.apk` for a basic debug build).
@@ -139,11 +143,10 @@ This makes a permanent registration for the provided `IPA`.
 
 If you are building and running on an iOS simulator then there will be no `.ipa` file and you must ensure the app [always passes](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy) on your simulator without needing to perform a registration.
 
-> **IMPORTANT:** The registration takes around 30 seconds to propagate across the Approov Cloud Infrastructure, therefore don't try to run the app again before this time has elapsed. During development of your app you can ensure it [always passes](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy) on your device to not have to register the app each time you modify it.
 
 ## SHAPES APP WITH APPROOV API PROTECTION
 
-Do not make any further code changes and run the app again either from Android Studio (either Android or iOS) or run the iOS app from Xcode. Now press the `fetch` button. You should now see this (or another shape):
+Do not make any further code changes and run the app again either from Android Studio (either Android or iOS) or run the iOS app from Xcode. Now press the `Shape` button. You should now see this (or another shape):
 
 <p>
     <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">
@@ -172,7 +175,7 @@ Firstly, revert any previous change to `shared/src/commonMain/kotlin/io/approov/
 
 Secondly, the `SHAPES_API_KEY` should also be changed to `shapes_api_key_placeholder` by commenting/uncommenting the relevant lines, effectively removing the actual API key out of the code.
 
-We need to inform Approov that it needs to substitute the placeholder value for the real API key on the `api-key` header. This is done seperately for each platform:
+We need to inform Approov that it needs to substitute the placeholder value for the real API key on the `api-key` header. This is done separately for each platform:
 
 For Android, in the file `androidApp/src/main/java/io/approov/shapes/android/MainActivity.kt` uncomment the line that calls `Approov.addSubstitutionHeader`.
 
@@ -194,7 +197,7 @@ approov secstrings -addKey shapes_api_key_placeholder -predefinedValue yXClypapW
 
 > Note that this command also requires an [admin role](https://approov.io/docs/latest/approov-usage-documentation/#account-access-roles).
 
-Run the app again without making any changes to the app and press the `fetch` button. You should now see this (or another shape):
+Run the app again without making any changes to the app and press the `Shape` button. You should now see this (or another shape):
 
 <p>
     <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">

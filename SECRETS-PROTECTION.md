@@ -111,7 +111,6 @@ If you are building and running on an iOS simulator then there will be no `.ipa`
 If the app is not recognized as being valid by Approov then an exception is thrown on the network request and the API call is not completed. The secret value will never be communicated to the app in this case.
 
 If you wish to provide more specific information about the cause of the rejection then you must use the [precheck](#prechecking) capability that can provide more detailed information in the error returned to the failure function. Note that since this code needs to be implemented in the platform specific app rather than the shared code, you will likely need to implement this as an exceptional case to handle situations where the attestation is failing.
-```
 
 If you wish to provide more detailed rejection cause feedback then enable the [Rejection Reasons](https://approov.io/docs/latest/approov-usage-documentation/#rejection-reasons) feature:
 
@@ -129,7 +128,7 @@ See [Exploring Other Approov Features](https://approov.io/docs/latest/approov-us
 ### Header Prefixes
 In some cases the value to be substituted on a header may be prefixed by some fixed string. A common case is the presence of `Bearer` included in an authorization header to indicate the use of a bearer token. In this case you can specify a prefix as follows:
 
-```Javascript
+```
 ApproovService.addSubstitutionHeader("Authorization", "Bearer ");
 ```
 
