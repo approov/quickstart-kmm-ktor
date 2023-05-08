@@ -1,4 +1,4 @@
-# Approov Quickstart: Kotlin Multiplatform Mobile Ktor
+# Approov Quickstart: Kotlin Multiplatform for Mobile Ktor
 
 This quickstart is written specifically for Android and iOS apps that are implemented using [`Kotlin Multiplatform for Mobile`](https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html) and [`Ktor Client`](https://ktor.io/docs/welcome.html) for network requests. If this is not your situation then check if there is a more relevant quickstart guide available.
 

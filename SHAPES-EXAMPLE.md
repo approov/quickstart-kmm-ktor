@@ -6,6 +6,7 @@ This quickstart is written specifically for Android and iOS apps that are implem
 * Access to a trial or paid Approov account
 * The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with access to your account
 * [Android Studio](https://developer.android.com/studio) installed (version Flamingo 2022.2.1 is used in this guide) if you will build the Android app. Note that the `ANDROID_HOME` value must be properly defined to allow building.
+* An installation of Java 11 to support the Gradle plugins used. Note that if this is not globally available then follow the instructions when first trying to build the project to change `JAVA_HOME` or edit `Settings -> Build, Execution, Deployment -> Build Tools -> Gradle` and change the use of the `Gradle JDK` to be a specific version rather than from the `gradle-wrapper.properties` file.
 * The [`Kotlin Multiplatform Mobile Plugin`](https://kotlinlang.org/docs/multiplatform-mobile-plugin-releases.html) installed in Android Studio (version 0.5.3 was used in this guide). Amongst other things, this allows iOS apps to be launched directly from Android Studio.
 * [Xcode](https://developer.apple.com/xcode/) installed (version 14.3 is used in this guide) to build iOS version of application
 * [Cocoapods](https://cocoapods.org) installed to support iOS building (1.11.3 used in this guide)
@@ -15,7 +16,7 @@ This quickstart is written specifically for Android and iOS apps that are implem
 
 ## RUNNING THE SHAPES APP WITHOUT APPROOV
 
-Open the project in the `shapes-app` folder using `File->Open` in Android Studio. Select the `androidApp` in the `Run/Debug` configuration and then press `Run`. This should launch the app on an Android device or simulator.
+Open the folder `shapes-app` folder using `File->Open` in Android Studio. Select the `androidApp` in the `Run/Debug` configuration and then press `Run`. This should launch the app on an Android device or simulator.
 
 You will see two buttons:
 
