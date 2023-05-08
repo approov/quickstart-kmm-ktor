@@ -174,7 +174,7 @@ On iOS:
 var key: String
 var newDef: String?
 var secret: String?
-// define key and newDefinition here
+// define key and newDef here
 do {
     try secret = ApproovService.fetchSecureString(key, newDef: newDef)
 } catch let error as NSError {
