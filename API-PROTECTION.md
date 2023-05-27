@@ -111,8 +111,9 @@ try {
     ApproovService.precheck()
 }
 catch(e: ApproovRejectionException) {
-    // failure due to the attestation being rejected, e.getARC() and e.getRejectionReasons() may be used to present information to the user
-    // (note e.getRejectionReasons() is only available if the feature is enabled, otherwise it is always an empty string)
+    // failure due to the attestation being rejected, e.getARC() and e.getRejectionReasons() may be
+    // used to present information to the user (note e.getRejectionReasons() is only available if the
+    // feature is enabled, otherwise it is always an empty string)
 }
 catch(e: ApproovNetworkException) {
     // failure due to a potentially temporary networking issue, allow for a user initiated retry
@@ -130,11 +131,12 @@ ApproovService.precheck(&error)
 if error != nil {
     if let type = error!.userInfo["type"] as? String {
         if (type == "rejection") {
-            // failure due to the attestation being rejected, see error.userInfo.message - Attestation Response Code (ARC) for the
-            // failure will be provided in error.userInfo["rejectionARC"] and comma separated reasons may be provided in
-            // error.userInfo["rejectionReasons"]
+            // failure due to the attestation being rejected, see error.userInfo.message - Attestation
+            // Response Code (ARC) for the failure will be provided in error.userInfo["rejectionARC"] and
+            // comma separated reasons may be provided in error.userInfo["rejectionReasons"]
         } else if (type == "network") {
-            // failure due to a potentially temporary networking issue, allow for a user initiated retry, see error.userInfo["message"]
+            // failure due to a potentially temporary networking issue, allow for a user initiated retry,
+            // see error.userInfo["message"]
         } else {
             // a more permanent error, see error.userInfo["message"]
         }
