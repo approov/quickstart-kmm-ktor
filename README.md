@@ -224,7 +224,8 @@ import approov_service_nsurlsession
 
 ApproovService.initialize("<enter-your-config-string-here>", error: nil)
 let delegate = IOSHttpClient.companion.getDelegate()
-let session = ApproovNSURLSession.init(configuration: .default, delegate: delegate, delegateQueue: OperationQueue.current)
+let session = ApproovNSURLSession.init(configuration: .default, delegate: delegate,
+    delegateQueue: OperationQueue.current)
 IOSHttpClient.companion.setSession(pNSURLSession: session!)
 ```
 
