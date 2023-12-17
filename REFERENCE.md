@@ -5,7 +5,7 @@ This provides a reference for all of the methods defined on `ApproovService`. Th
 ## Android
 On Android this imports access to the Java implementation that is called from Kotlin:
 
-```Kotlin
+```kotlin
 import io.approov.service.okhttp.ApproovService
 ```
 
@@ -34,7 +34,7 @@ This initializes the Approov SDK and thus enables the Approov features. The `con
 
 On Android:
 
-```Kotlin
+```kotlin
 void initialize(Context context, String config)
 ```
 
@@ -51,7 +51,7 @@ This provides an `NSError` if the initialization fails.
 ## GetOkHttpClient (Android Only)
 Gets the `OkHttpClient` that enables the Approov service. This adds the Approov token in a header to requests, performs and header or query parameter substitutions and also pins the connections. The `OkHttpClient` is constructed lazily on demand but is cached if there are no changes. You *MUST* always obtain the `OkHttpClient` using this method for all requests, to ensure an up to date client is used with the latest dynamic pins.
 
-```Kotlin
+```kotlin
 OkHttpClient getOkHttpClient()
 ```
 
@@ -60,7 +60,7 @@ If Approov has not been initialized, then this provides an `OkHttpClient` withou
 ## SetOkHttpClientBuilder (Android Only)
 Sets the `OkHttpClient.Builder` to be used for constructing the Approov `OkHttpClient`. This allows a custom configuration to be set, with additional interceptors and properties.
 
-```Kotlin
+```kotlin
 void setOkHttpClientBuilder(OkHttpClient.Builder builder)
 ```
 
@@ -69,7 +69,7 @@ Indicates that the network interceptor should proceed anyway if it is not possib
 
 On Android:
 
-```Kotlin
+```kotlin
 void setProceedOnNetworkFail(Boolean proceed)
 ```
 
@@ -81,12 +81,27 @@ public static func setProceedOnNetworkFailure(_ proceed: Bool)
 
 Note that this should be used with *CAUTION* because it may allow a connection to be established before any dynamic pins have been received via Approov, thus potentially opening the channel to a MitM.
 
+## SetDevKey
+[Sets a development key](https://approov.io/docs/latest/approov-usage-documentation/#using-a-development-key) in order to force an app to be passed. This can be used if the app has to be resigned in a test environment and would thus fail attestation otherwise.
+
+On Android:
+
+```kotlin
+void setDevKet(String devKey)
+```
+
+On iOS:
+
+```Swift
+public static func setDevKey(_ devKey: String)
+```
+
 ## SetApproovHeader
 Sets the header that the Approov token is added on, as well as an optional prefix String (such as "`Bearer `"). Pass in an empty string if you do not wish to have a prefix. By default the token is provided on `Approov-Token` with no prefix.
 
 On Android:
 
-```Kotlin
+```kotlin
 void setApproovHeader(String header, String? prefix)
 ```
 
@@ -102,7 +117,7 @@ Sets a binding `header` that may be present on requests being made. This is for 
 
 On Android:
 
-```Kotlin
+```kotlin
 void setBindingHeader(String header)
 ```
 
@@ -117,7 +132,7 @@ Adds the name of a `header` which should be subject to [secure strings](https://
 
 On Android:
 
-```Kotlin
+```kotlin
 void addSubstitutionHeader(String header, String? requiredPrefix)
 ```
 
@@ -132,7 +147,7 @@ Removes a `header` previously added using `addSubstitutionHeader`.
 
 On Android:
 
-```Kotlin
+```kotlin
 void removeSubstitutionHeader(String header)
 ```
 
@@ -147,7 +162,7 @@ Adds a `key` name for a query parameter that should be subject to [secure string
 
 On Android:
 
-```Kotlin
+```kotlin
 void addSubstitutionQueryParam(String key)
 ```
 
@@ -162,7 +177,7 @@ Removes a query parameter `key` name previously added using `addSubstitutionQuer
 
 On Android:
 
-```Kotlin
+```kotlin
 void removeSubstitutionQueryParam(String key)
 ```
 
@@ -177,7 +192,7 @@ Adds an exclusion URL [regular expression](https://regex101.com/) via the `urlRe
 
 On Android:
 
-```Kotlin
+```kotlin
 void addExclusionURLRegex(String urlRegex)
 ```
 
@@ -194,7 +209,7 @@ Removes an exclusion URL regular expression (`urlRegex`) previously added using 
 
 On Android:
 
-```Kotlin
+```kotlin
 void removeExclusionURLRegex(String urlRegex)
 ```
 
@@ -209,7 +224,7 @@ Performs a background fetch to lower the effective latency of a subsequent token
 
 On Android:
 
-```Kotlin
+```kotlin
 void prefetch()
 ```
 
@@ -224,7 +239,7 @@ Performs a precheck to determine if the app will pass attestation. This requires
 
 On Android:
 
-```Kotlin
+```kotlin
 @Throws(ApproovException::class)
 void precheck()
 ```
@@ -244,7 +259,7 @@ Gets the [device ID](https://approov.io/docs/latest/approov-usage-documentation/
 
 On Android:
 
-```Kotlin
+```kotlin
 @Throws(ApproovException::class)
 String getDeviceID()
 ```
@@ -264,7 +279,7 @@ Directly sets the [token binding](https://approov.io/docs/latest/approov-usage-d
 
 On Android:
 
-```Kotlin
+```kotlin
 @Throws(ApproovException::class)
 void setDataHashInToken(String data)
 ```
@@ -282,7 +297,7 @@ Performs an Approov token fetch for the given `url`. This should be used in situ
 
 On Android:
 
-```Kotlin
+```kotlin
 @Throws(ApproovException::class)
 String fetchToken(String url)
 ```
@@ -300,7 +315,7 @@ Gets the [message signature](https://approov.io/docs/latest/approov-usage-docume
 
 On Android:
 
-```Kotlin
+```kotlin
 @Throws(ApproovException::class)
 String getMessageSignature(String message)
 ```
@@ -320,7 +335,7 @@ Fetches a [secure string](https://approov.io/docs/latest/approov-usage-documenta
 
 On Android:
 
-```Kotlin
+```kotlin
 @Throws(ApproovException::class)
 String? fetchSecureString(String key, String? newDef)
 ```
@@ -338,7 +353,7 @@ Fetches a [custom JWT](https://approov.io/docs/latest/approov-usage-documentatio
 
 On Android:
 
-```Kotlin
+```kotlin
 @Throws(ApproovException::class)
 String fetchCustomJWT(String payload)
 ```

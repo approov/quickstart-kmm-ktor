@@ -115,38 +115,44 @@ In the file `androidApp/src/main/java/io/approov/shapes/android/MainActivity.kt`
 
 In the file `iosApp/iosApp/ContentView.swift` uncomment the line that imports `approov_service_nsurlsession` and also the the lines that call `ApproovService.initialize` (filling in your actual configuration string) and subsequent lins that setup the session.
 
-## REGISTER YOUR APP WITH APPROOV
+### ADD YOUR SIGNING CERTIFICATE TO APPROOV
+You should add the signing certificate used to sign apps so that Approov can recognize your app as being official.
 
-Now run the app again on your chosen platform, using the previous instructions, to ensure that the generated build outputs are up to date.
-
-> **IMPORTANT:** The registration takes around 30 seconds to propagate across the Approov Cloud Infrastructure, therefore don't try to run the app again before this time has elapsed. During development of your app you can ensure it [always passes](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy) on your device to not have to register the app each time you modify it.
+Codesigning must also be enabled, if you need assistance please check [Microsoft's codesigning support](https://docs.microsoft.com/en-us/xamarin/ios/deploy-test/provisioning/) or [Android deploy signing](https://docs.microsoft.com/en-us/xamarin/android/deploy-test/signing/?tabs=macos). Make sure you have selected the correct project (Shapes.App.iOS), build mode (Release) and target device (Generic Device) settings.
 
 ### Android
-
-You should build the APK using `Build -> Build Bundle(s) / APK(s) -> Build APK(s)` in Android Studio. Follow the `locate` link in the dialog that pops up when the buid is complete. Find the path of the generated APK (which may be called `androidApp-debug.apk` for a basic debug build).
-
-You can use the `approov` CLI registration command as follows:
+Add the local certificate used to sign apps in Android Studio. The following assumes it is in PKCS12 format:
 
 ```
-approov registration -add /path/to/APK
+approov appsigncert -add ~/.android/debug.keystore -storePassword android -autoReg
 ```
+
+Note, on Windows you need to substitute \ for / in the above command and the full path specified for the user home directory instead of ~.
+
+See [Android App Signing Certificates](https://approov.io/docs/latest/approov-usage-documentation/#android-app-signing-certificates) if your keystore format is not recognized or if you have any issues adding the certificate. This also provides information about adding certificates for when releasing to the Play Store. Note also that you need to apply specific [Android Obfuscation](https://approov.io/docs/latest/approov-usage-documentation/#android-obfuscation) rules when creating an app release.
 
 ### iOS
+These are available in your Apple development account portal. Go to the initial screen showing program resources:
 
-You should [build an IPA](https://approov.io/docs/latest/approov-usage-documentation/#ios-ipa-extraction) with Xcode. You can then use the `approov` CLI registration command as follows:
+![Apple Program Resources](readme-images/program-resources.png)
+
+Click on `Certificates` and you will be presented with the full list of development and distribution certificates for the account. Click on the certificate being used to sign applications from your particular Xcode installation and you will be presented with the following dialog:
+
+![Download Certificate](readme-images/download-cert.png)
+
+Now click on the `Download` button and a file with a `.cer` extension is downloaded, e.g. `development.cer`. Add it to Approov with:
 
 ```
-approov registration -add /path/to/IPA
+approov appsigncert -add development.cer -autoReg
 ```
 
-This makes a permanent registration for the provided `IPA`.
+If it is not possible to download the correct certificate from the portal then it is also possible to [add app signing certificates from the app](https://approov.io/docs/latest/approov-usage-documentation/#adding-apple-app-signing-certificates-from-app).
 
-If you are building and running on an iOS simulator then there will be no `.ipa` file and you must ensure the app [always passes](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy) on your simulator without needing to perform a registration.
-
+> **IMPORTANT:** Apps built to run on the iOS simulator are not code signed and thus auto-registration does not work for them. In this case you can consider [forcing a device ID to pass](https://approov.io/docs/latest/approov-usage-documentation/#forcing-a-device-id-to-pass) to get a valid attestation.
 
 ## SHAPES APP WITH APPROOV API PROTECTION
 
-Do not make any further code changes and run the app again either from Android Studio (either Android or iOS) or run the iOS app from Xcode. Now press the `Shape` button. You should now see this (or another shape):
+Run the app again either from Android Studio (either Android or iOS) or run the iOS app from Xcode. Now press the `Shape` button. You should now see this (or another shape):
 
 <p>
     <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">
@@ -160,12 +166,12 @@ This means that the app is obtaining a validly signed Approov token to present t
 
 If you don't get a valid shape then there are some things you can try. Remember this may be because the device you are using has some characteristics that cause rejection for the currently set [Security Policy](https://approov.io/docs/latest/approov-usage-documentation/#security-policies) on your account:
 
-* Ensure that the version of the app you are running is exactly the one you registered with Approov. Also, if you are running the app from a debugger then valid tokens are not issued.
+* Ensure that the version of the app you are running is signed with the correct certificate.
 * On Android, look at the [`logcat`](https://developer.android.com/studio/command-line/logcat) output from the device. You can see the specific Approov output using `adb logcat | grep ApproovService`. This will show lines including the loggable form of any tokens obtained by the app. You can easily [check](https://approov.io/docs/latest/approov-usage-documentation/#loggable-tokens) the validity and find out any reason for a failure.
 * On iOS, look at the console output from the device using the [Console](https://support.apple.com/en-gb/guide/console/welcome/mac) app from MacOS. This provides console output for a connected simulator or physical device. Select the device and search for `ApproovService` to obtain specific logging related to Approov. This will show lines including the loggable form of any tokens obtained by the app. You can easily [check](https://approov.io/docs/latest/approov-usage-documentation/#loggable-tokens) the validity and find out any reason for a failure.
-* Consider using an [Annotation Policy](https://approov.io/docs/latest/approov-usage-documentation/#annotation-policies) during initial development to directly see why the device is not being issued with a valid token.
-* Use `approov metrics` to see [Live Metrics](https://approov.io/docs/latest/approov-usage-documentation/#live-metrics) of the cause of failure.
-* You can use a debugger, simulator or emulator and get valid Approov tokens on a specific device by ensuring it [always passes](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy). As a shortcut, when you are first setting up, you can add a [device security policy](https://approov.io/docs/latest/approov-usage-documentation/#adding-a-device-security-policy) using the `latest` shortcut as discussed so that the `device ID` doesn't need to be extracted from the logs or an Approov token.
+* Use `approov metrics` to see [Live Metrics](https://approov.io/docs/latest/approov-usage-documentation/#metrics-graphs) of the cause of failure.
+* You can use a debugger or emulator/simulator and get valid Approov tokens on a specific device by ensuring you are [forcing a device ID to pass](https://approov.io/docs/latest/approov-usage-documentation/#forcing-a-device-id-to-pass). As a shortcut, you can use the `latest` as discussed so that the `device ID` doesn't need to be extracted from the logs or an Approov token.
+* Also, you can use a debugger or Android emulator and get valid Approov tokens on any device if you [mark the signing certificate as being for development](https://approov.io/docs/latest/approov-usage-documentation/#development-app-signing-certificates).
 
 ## SHAPES APP WITH SECRETS PROTECTION
 
@@ -181,26 +187,18 @@ For Android, in the file `androidApp/src/main/java/io/approov/shapes/android/Mai
 
 For iOS, in the file `iosApp/iosApp/ContentView.swift` uncomment the line that calls `Approov.addSubstitutionHeader`.
 
-Next we enable the [Secure Strings](https://approov.io/docs/latest/approov-usage-documentation/#secure-strings) feature:
-
-```
-approov secstrings -setEnabled
-```
-
-> Note that this command requires an [admin role](https://approov.io/docs/latest/approov-usage-documentation/#account-access-roles).
-
 You must inform Approov that it should map `shapes_api_key_placeholder` to `yXClypapWNHIifHUWmBIyPFAm` (the actual API key) in requests as follows:
 
 ```
 approov secstrings -addKey shapes_api_key_placeholder -predefinedValue yXClypapWNHIifHUWmBIyPFAm
 ```
 
-> Note that this command also requires an [admin role](https://approov.io/docs/latest/approov-usage-documentation/#account-access-roles).
+> Note that this command requires an [admin role](https://approov.io/docs/latest/approov-usage-documentation/#account-access-roles).
 
-Run the app again without making any changes to the app and press the `Shape` button. You should now see this (or another shape):
+Run the app again and press the `Shape` button. You should now see this (or another shape):
 
 <p>
     <img src="readme-images/shapes-good.png" width="256" title="Shapes Good">
 </p>
 
-This means that the registered app is able to access the API key, even though it is no longer embedded in the app code, and provide it to the shapes request.
+This means that the app is able to access the API key, even though it is no longer embedded in the app code, and provide it to the shapes request.

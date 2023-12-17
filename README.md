@@ -2,7 +2,7 @@
 
 This quickstart is written specifically for Android and iOS apps that are implemented using [`Kotlin Multiplatform for Mobile`](https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html) and [`Ktor Client`](https://ktor.io/docs/welcome.html) for network requests. If this is not your situation then check if there is a more relevant quickstart guide available.
 
-This quickstart provides the basic steps for integrating Approov into your app. A more detailed step-by-step guide using a [Shapes App Example](https://github.com/approov/quickstart-kmm-ktor/blob/main/SHAPES-EXAMPLE.md) is also available.
+This page provides all the steps for integrating Approov into your app. Additionally, a step-by-step tutorial guide using our [Shapes App Example](https://github.com/approov/quickstart-kmm-ktor/blob/main/SHAPES-EXAMPLE.md) is also available.
 
 To follow this guide you should have received an onboarding email for a trial or paid Approov account.
 
@@ -74,7 +74,7 @@ In order to use Approov you must generate a specialized instantiation of `Ktor` 
 
 If you have code such as the following in `shared/src/commonMain`:
 
-```Kotlin
+```kotlin
 val client = HttpClient()
 val response: HttpResponse = client.get {
   url("https://your.domain/endpoint")
@@ -83,7 +83,7 @@ val response: HttpResponse = client.get {
 
 The you must modify this to use an `HttpClient` that is constructed in the platform specific parts of `shared`. Add the following code which declares an interface for obtaining a platform specific custom client:
 
-```Kotlin
+```kotlin
 interface CustomHttpClient {
     fun getClient(): HttpClient
 }
@@ -93,7 +93,7 @@ internal expect val ApplicationHttpClient: CustomHttpClient
 
 Change the original code to use the platform specific `HttpClient` as follows:
 
-```Kotlin
+```kotlin
 val client = ApplicationHttpClient.getClient()
 val response: HttpResponse = client.get {
   url("https://your.domain/endpoint")
@@ -120,7 +120,7 @@ val androidMain by getting {
 
 Add the following code into the `shared/src/androidMain`:
 
-```Kotlin
+```kotlin
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.approov.service.okhttp.ApproovService
@@ -159,7 +159,7 @@ val iosMain by ... {
 
 Add the following code into the `shared/src/iosMain`:
 
-```Kotlin
+```kotlin
 import io.ktor.client.*
 import io.ktor.client.engine.darwin.Darwin
 import io.ktor.client.engine.darwin.KtorNSURLSessionDelegate
@@ -209,7 +209,7 @@ The `<enter-your-config-string-here>` in these code snippets is a custom string 
 
 You simply need to initialize Approov when the app is started, likely in the `onCreate` method when the app is launched in `androidApp/src`.
 
-```Kotlin
+```kotlin
 import io.approov.service.okhttp.ApproovService
 
 ApproovService.initialize(getApplicationContext(), "<enter-your-config-string-here>")
