@@ -6,7 +6,7 @@ This page provides all the steps for integrating Approov into your app. Addition
 
 To follow this guide you should have received an onboarding email for a trial or paid Approov account.
 
-Note that the minimum OS requirement for iOS is 11 and for Android the minimum SDK version is 21 (Android 5.0).
+Note that the minimum OS requirement for iOS is 12 and for Android the minimum SDK version is 21 (Android 5.0).
 
 ## ADDING THE APPROOV PACKAGE
 
@@ -25,13 +25,13 @@ dependencyResolutionManagement {
 }
 ```
 
-The add the dependency in the `shared/build.gradle.kts` to allow it to be used in the shared project as follows:
+Then add the dependency in the `shared/build.gradle.kts` to allow it to be used in the shared project as follows:
 
 ```
 val androidMain by getting {
       dependencies {
           ...
-          implementation("com.github.approov:approov-service-okhttp:3.1.0")
+          implementation("com.github.approov:approov-service-okhttp:3.2.0")
       }
 }
 ```
@@ -41,7 +41,7 @@ You must also add the dependency in `androidMain/build.gradle.kts`:
 ```
 dependencies {
   ...
-  implementation("com.github.approov:approov-service-okhttp:3.1.0")
+  implementation("com.github.approov:approov-service-okhttp:3.2.0")
 }
 ```
 
@@ -52,9 +52,9 @@ The Approov integration is available via [`CocoaPods`](https://cocoapods.org/). 
 ```
 target 'iosApp' do
     use_frameworks!
-    platform :ios, '11.0'
-    pod 'approov-service-nsurlsession', '3.1.2', :source => "https://github.com/approov/approov-service-nsurlsession.git"
-    pod 'approov-ios-sdk', '3.1.0', :source => "https://github.com/approov/approov-ios-sdk.git"
+    platform :ios, '12.0'
+    pod 'approov-service-nsurlsession', '3.2.0', :source => "https://github.com/approov/approov-service-nsurlsession.git"
+    pod 'approov-ios-sdk', '3.2.0', :source => "https://github.com/approov/approov-ios-sdk.git"
 end
 ```
 

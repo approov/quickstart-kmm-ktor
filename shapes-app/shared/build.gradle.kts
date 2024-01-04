@@ -14,6 +14,12 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
+            
+            // update when Xcode version 16 is available!
+            // see: https://youtrack.jetbrains.com/issue/KT-60230/Native-unknown-options-iossimulatorversionmin-sdkversion-with-Xcode-15-beta-3
+            if (System.getenv("XCODE_VERSION_MAJOR") == "1500") {
+                linkerOpts += "-ld64"
+            }
         }
     }
 
@@ -36,7 +42,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
 
                 // UNCOMMENT TO USE APPROOV
-                //implementation("com.github.approov:approov-service-okhttp:3.1.0")
+                //implementation("com.github.approov:approov-service-okhttp:3.2.0")
             }
         }
         val androidTest by getting

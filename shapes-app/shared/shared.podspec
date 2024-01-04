@@ -8,9 +8,9 @@ Pod::Spec.new do |spec|
     spec.summary                  = 'CocoaPods test library'
     spec.vendored_frameworks      = 'build/cocoapods/framework/shared.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target = '11.0'
-    spec.dependency 'approov-ios-sdk', '~> 3.1.0'
-    spec.dependency 'approov-service-nsurlsession', '~> 3.1.1'
+    spec.ios.deployment_target = '12.0'
+    spec.dependency 'approov-ios-sdk', '~> 3.2.0'
+    spec.dependency 'approov-service-nsurlsession', '~> 3.2.0'
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':shared',
