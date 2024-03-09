@@ -31,7 +31,7 @@ Then add the dependency in the `shared/build.gradle.kts` to allow it to be used 
 val androidMain by getting {
       dependencies {
           ...
-          implementation("com.github.approov:approov-service-okhttp:3.2.0")
+          implementation("com.github.approov:approov-service-okhttp:3.2.1")
       }
 }
 ```
@@ -41,7 +41,7 @@ You must also add the dependency in `androidMain/build.gradle.kts`:
 ```
 dependencies {
   ...
-  implementation("com.github.approov:approov-service-okhttp:3.2.0")
+  implementation("com.github.approov:approov-service-okhttp:3.2.1")
 }
 ```
 
