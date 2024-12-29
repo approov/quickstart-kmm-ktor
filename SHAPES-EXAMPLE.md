@@ -48,13 +48,11 @@ The addition of Approov requires the SDK and a middleware layer to be added to t
 
 ## Android
 
-The Approov integration is available via [`jitpack`](https://jitpack.io). This allows inclusion into the project by simply specifying a dependency in the `gradle` files for the app. Follow these steps:
+The Approov integration is available via [`maven`](https://mvnrepository.com/repos/central). This allows inclusion into the project by simply specifying a dependency in the `gradle` files for the app. Follow these steps:
 
-1. `jitpack` needs to be added in the `settings.gradle.kts` file in the top level of the project. Uncomment the relevant lines.
+1. The dependency to `approov-service-okhttp` needs to be added to the `build.gradle.kts` file in the `shared` project. Uncomment the relevant lines.
 
-2. The dependency to `approov-service-okhttp` needs to be added to the `build.gradle.kts` file in the `shared` project. Uncomment the relevant lines.
-
-3. The dependency to `approov-service-okhttp` also needs to be added to the `build.gradle.kts` file in the `androidApp` project. Uncomment the relevant lines.
+2. The dependency to `approov-service-okhttp` also needs to be added to the `build.gradle.kts` file in the `androidApp` project. Uncomment the relevant lines.
 
 Make sure you do a Gradle sync (by selecting `Sync Now` in the banner at the top of the modified `.gradle` file) after making these changes.
 

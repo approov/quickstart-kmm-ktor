@@ -12,26 +12,14 @@ Note that the minimum OS requirement for iOS is 12 and for Android the minimum S
 
 ### Android
 
-The Approov integration is available via [`jitpack`](https:/jitpack.io). This allows inclusion into the project by simply specifying a dependency in Gradle. First add the `jitpack` repository at the top level in the project `settings.gradle.kts` file as follows:
-
-```
-dependencyResolutionManagement {
-    repositories {
-      ...
-      maven {
-            url = uri("https://jitpack.io")
-      }
-    }
-}
-```
-
-Then add the dependency in the `shared/build.gradle.kts` to allow it to be used in the shared project as follows:
+The Approov integration is available via [`maven`](https://mvnrepository.com/repos/central). This allows inclusion into the project by simply specifying a dependency in Gradle. 
+Add the approov service dependency in the `shared/build.gradle.kts` to allow it to be used in the shared project as follows:
 
 ```
 val androidMain by getting {
       dependencies {
           ...
-          implementation("com.github.approov:approov-service-okhttp:3.2.2")
+          implementation("io.approov:service.okhttp:3.3.1")
       }
 }
 ```
@@ -41,7 +29,7 @@ You must also add the dependency in `androidMain/build.gradle.kts`:
 ```
 dependencies {
   ...
-  implementation("com.github.approov:approov-service-okhttp:3.2.2")
+  implementation("io.approov:service.okhttp:3.3.1")
 }
 ```
 
