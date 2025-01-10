@@ -38,7 +38,7 @@ This checks the connectivity by connecting to the endpoint `https://shapes.appro
 
 This contacts `https://shapes.approov.io/v1/shapes` to get the name of a random shape. This endpoint is protected with an API key that is built into the code, and therefore can be easily extracted from the app.
 
-You can run on iOS either by selecting `iosApp` in the Android Studio top menu bar and running (if you have the `KMM` plugin installd in Android Studio) or by opening the `.xcproject` in Xcode and running from there. You will see a very similiar app screen layout in the iOS version.
+You can run on iOS either by selecting `iosApp` in the Android Studio top menu bar and running (if you have the `KMM` plugin installd in Android Studio) or by opening the `.xcproject` in Xcode and running from there. You will see a very similar app screen layout in the iOS version.
 
 The subsequent steps of this guide show you how to provide better protection, either using an Approov Token or by migrating the API key to become an Approov managed secret.
 
