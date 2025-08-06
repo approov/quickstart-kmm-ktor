@@ -42,7 +42,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
 
                 // UNCOMMENT TO USE APPROOV
-                //implementation("io.approov:service.okhttp:3.3.1")
+                //implementation("io.approov:service.okhttp:3.5.0")
             }
         }
         val androidTest by getting
