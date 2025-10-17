@@ -19,7 +19,7 @@ Add the approov service dependency in the `shared/build.gradle.kts` to allow it 
 val androidMain by getting {
       dependencies {
           ...
-          implementation("io.approov:service.okhttp:3.5.0")
+          implementation("io.approov:service.okhttp:3.5.1")
       }
 }
 ```
@@ -29,7 +29,7 @@ You must also add the dependency in `androidMain/build.gradle.kts`:
 ```
 dependencies {
   ...
-  implementation("io.approov:service.okhttp:3.5.0")
+  implementation("io.approov:service.okhttp:3.5.1")
 }
 ```
 
@@ -41,7 +41,7 @@ The Approov integration is available via [`CocoaPods`](https://cocoapods.org/). 
 target 'iosApp' do
     use_frameworks!
     platform :ios, '12.0'
-    pod 'approov-service-nsurlsession', '3.5.0'
+    pod 'approov-service-nsurlsession', '3.5.1'
 end
 ```
 
