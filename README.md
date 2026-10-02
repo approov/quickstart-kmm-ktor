@@ -19,7 +19,7 @@ Add the approov service dependency in the `shared/build.gradle.kts` to allow it 
 val androidMain by getting {
       dependencies {
           ...
-          implementation("io.approov:service.okhttp:3.5.5")
+          implementation("io.approov:service.okhttp:3.5.8")
       }
 }
 ```
@@ -29,7 +29,7 @@ You must also add the dependency in `androidMain/build.gradle.kts`:
 ```
 dependencies {
   ...
-  implementation("io.approov:service.okhttp:3.5.5")
+  implementation("io.approov:service.okhttp:3.5.8")
 }
 ```
 

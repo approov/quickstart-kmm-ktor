@@ -44,5 +44,5 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
 
     // *** UNCOMMENT THE LINE BELOW FOR APPROOV ***
-    //implementation("io.approov:service.okhttp:3.5.1")
+    //implementation("io.approov:service.okhttp:3.5.8")
 }
