@@ -6,7 +6,9 @@ This page provides all the steps for integrating Approov into your app. Addition
 
 To follow this guide you should have received an onboarding email for a trial or paid Approov account.
 
-Note that the minimum OS requirement for iOS is 12 and for Android the minimum SDK version is 21 (Android 5.0).
+Note that the minimum OS requirement for iOS is 12 and for Android the minimum SDK version is 23 (Android 6.0).
+
+On Android, use Android Gradle plugin 8.1.0 or later. With earlier versions, the D8 dexer fails with `java.lang.NullPointerException: Cannot invoke "String.length()"` when it processes the service layer.
 
 ## ADDING THE APPROOV PACKAGE
 
@@ -16,15 +18,13 @@ The Approov integration is available via [`maven`](https://mvnrepository.com/rep
 Add the approov service dependency in the `shared/build.gradle.kts` to allow it to be used in the shared project as follows:
 
 ```
-val androidMain by getting {
-      dependencies {
-          ...
-          implementation("io.approov:service.okhttp:3.5.8")
-      }
+androidMain.dependencies {
+    ...
+    implementation("io.approov:service.okhttp:3.5.8")
 }
 ```
 
-You must also add the dependency in `androidMain/build.gradle.kts`:
+You must also add the dependency in `androidApp/build.gradle.kts`:
 
 ```
 dependencies {
@@ -96,12 +96,10 @@ You must then provide platform specific implementations as follows:
 You must ensure the `OkHttp` based Ktor engine is installed in the `shared/build.gradle.kts` as follows:
 
 ```
-val androidMain by getting {
-      dependencies {
-          ...
-          implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-          ...
-      }
+androidMain.dependencies {
+    ...
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    ...
 }
 ```
 
@@ -134,13 +132,10 @@ The iOS implementation is a little more complex than Android, since there is a n
 You must ensure the `Darwin` based Ktor engine is installed in the `shared/build.gradle.kts` as follows:
 
 ```
-val iosMain by ... {
+iosMain.dependencies {
     ...
-    dependencies {
-        ...
-        implementation("io.ktor:ktor-client-darwin:$ktorVersion")
-        ...
-    }
+    implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+    ...
 }
 ```
 
