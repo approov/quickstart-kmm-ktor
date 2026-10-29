@@ -5,14 +5,33 @@ This quickstart is written specifically for Android and iOS apps that are implem
 ## WHAT YOU WILL NEED
 * Access to a trial or paid Approov account
 * The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with access to your account
-* [Android Studio](https://developer.android.com/studio) installed (version Hedgehog 2023.1.1 is used in this guide) if you will build the Android app. Note that the `ANDROID_HOME` value must be properly defined to allow building.
-* An installation of Java 11 to support the Gradle plugins used. Note that if this is not globally available then follow the instructions when first trying to build the project to change `JAVA_HOME` or edit `Settings -> Build, Execution, Deployment -> Build Tools -> Gradle` and change the use of the `Gradle JDK` to be a specific version rather than from the `gradle-wrapper.properties` file.
+* [Android Studio](https://developer.android.com/studio) installed if you will build the Android app. Note that the `ANDROID_HOME` value must be properly defined to allow building.
+* An installation of Java 17 to support the Gradle plugins used. The project uses Gradle 7.4, which cannot run on Java 21. Android Studio 2025.3 bundles Java 21, so set its `Gradle JDK` to Java 17. Note that if Java 17 is not globally available then follow the instructions when first trying to build the project to change `JAVA_HOME` or edit `Settings -> Build, Execution, Deployment -> Build Tools -> Gradle` and change the use of the `Gradle JDK` to be a specific version rather than from the `gradle-wrapper.properties` file.
 * The [`Kotlin Multiplatform Mobile Plugin`](https://kotlinlang.org/docs/multiplatform-mobile-plugin-releases.html) installed in Android Studio (version 0.8.1 was used in this guide). Amongst other things, this allows iOS apps to be launched directly from Android Studio.
-* [Xcode](https://developer.apple.com/xcode/) installed (version 15.1 is used in this guide) to build iOS version of application
-* [Cocoapods](https://cocoapods.org) installed to support iOS building (1.12.1 is used in this guide)
+* [Xcode](https://developer.apple.com/xcode/) installed (version 26.4 is used in this guide) to build iOS version of application
+* [Cocoapods](https://cocoapods.org) installed to support iOS building (1.16.2 is used in this guide)
 * An iOS device or simulator if you are using the iOS platform
 * An Android device or emulator if you are using the Android platform
 * The content of this repo
+
+### TESTED VERSIONS
+
+This guide was last tested in October 2026 with these versions:
+
+| Item | Version |
+|---|---|
+| Xcode | 26.4 (17E192) |
+| iOS simulator | iPhone 17 Pro, iOS 26.4 |
+| iOS device | iPhone 16e, iOS 27.0 |
+| CocoaPods | 1.16.2 |
+| `approov-service-nsurlsession` | 3.5.5, with `approov-ios-sdk` 3.5.3 |
+| Kotlin | 1.9.24 |
+| Gradle wrapper | 7.4 |
+| Java | 17.0.14 |
+| Android emulator | Android 17 (API 37) |
+| Android Studio | 2025.3, installed but not used: the Android app was built with the Gradle wrapper from the command line |
+
+The iOS app was tested with Approov API protection and secrets protection. The Android app was tested without Approov.
 
 ## RUNNING THE SHAPES APP WITHOUT APPROOV
 
