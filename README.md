@@ -41,7 +41,7 @@ The Approov integration is available via [`CocoaPods`](https://cocoapods.org/). 
 target 'iosApp' do
     use_frameworks!
     platform :ios, '12.0'
-    pod 'approov-service-nsurlsession', '3.5.3'
+    pod 'approov-service-nsurlsession', '3.5.5'
 end
 ```
 
@@ -52,6 +52,8 @@ After creating or updating your `Podfile`, change the directory to `iosApp` in y
 ```
 pod install
 ```
+
+If CocoaPods cannot find `approov-service-nsurlsession` 3.5.5, your local spec index is out of date. Run `pod install --repo-update` instead.
 
 Note that once the pods have been installed you should open the Xcode project using the generated `iosApp.xcworkspace` as this contains the generated configuration for the pods. 
 

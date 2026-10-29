@@ -14,12 +14,6 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
-            
-            // update when Xcode version 16 is available!
-            // see: https://youtrack.jetbrains.com/issue/KT-60230/Native-unknown-options-iossimulatorversionmin-sdkversion-with-Xcode-15-beta-3
-            if (System.getenv("XCODE_VERSION_MAJOR") == "1500") {
-                linkerOpts += "-ld64"
-            }
         }
     }
 
@@ -45,7 +39,7 @@ kotlin {
                 //implementation("io.approov:service.okhttp:3.5.8")
             }
         }
-        val androidTest by getting
+        val androidUnitTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
