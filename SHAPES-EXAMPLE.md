@@ -9,9 +9,26 @@ This quickstart is written specifically for Android and iOS apps that are implem
 * An installation of Java 17 to support the Gradle plugins used. Note that if this is not globally available then follow the instructions when first trying to build the project to change `JAVA_HOME` or edit `Settings -> Build, Execution, Deployment -> Build Tools -> Gradle` and change the use of the `Gradle JDK` to be a specific version rather than from the `gradle-wrapper.properties` file.
 * The [`Kotlin Multiplatform Mobile Plugin`](https://kotlinlang.org/docs/multiplatform-mobile-plugin-releases.html) installed in Android Studio (version 0.8.1 was used in this guide). Amongst other things, this allows iOS apps to be launched directly from Android Studio.
 * [Xcode](https://developer.apple.com/xcode/) installed (version 26.4 is used in this guide) to build iOS version of application
+* [CocoaPods](https://cocoapods.org) installed, only if you use CocoaPods instead of Swift Package Manager (1.16.2 is used in this guide)
 * An iOS device or simulator if you are using the iOS platform
 * An Android device or emulator if you are using the Android platform
 * The content of this repo
+
+### TESTED VERSIONS
+
+This guide was last tested in October 2026 with these versions:
+
+| Item | Version |
+|---|---|
+| Xcode | 26.4 (17E192) |
+| iOS simulator | iPhone 17 Pro, iOS 26.4 |
+| iOS device | iPhone 16e, iOS 27.0 |
+| `approov-service-nsurlsession` | 3.5.5 with `approov-ios-sdk` 3.5.3, through Swift Package Manager and through CocoaPods 1.16.2 |
+| `approov-service-okhttp` | 3.5.8 |
+| Kotlin | 2.2.21 |
+| Android Gradle plugin / Gradle wrapper | 8.13.2 / 8.14.6 |
+| Java | 17.0.14 |
+| Android emulator | Android 17 (API 37) |
 
 ## RUNNING THE SHAPES APP WITHOUT APPROOV
 
@@ -59,7 +76,7 @@ Note that `approov-service-okhttp` is actually an open source wrapper layer that
 
 ## iOS
 
-The Approov integration is available via [Swift Package Manager](https://www.swift.org/documentation/package-manager/). CocoaPods is end of life, so this quickstart no longer uses it. Add the package to the `iosApp` project in Xcode:
+The Approov integration is available via [Swift Package Manager](https://www.swift.org/documentation/package-manager/). This is the recommended method. [CocoaPods](#cocoapods) is also supported. To use Swift Package Manager, add the package to the `iosApp` project in Xcode:
 
 1. Open `iosApp/iosApp.xcodeproj` in Xcode.
 2. Select `File -> Add Package Dependencies...`.
@@ -68,6 +85,30 @@ The Approov integration is available via [Swift Package Manager](https://www.swi
 5. Add the `ApproovNSURLSession` product to the `iosApp` target.
 
 This includes an open source Approov specialized version of `NSURLSession` and also the closed source [Approov SDK](https://github.com/approov/approov-ios-sdk).
+
+#### CocoaPods
+
+CocoaPods is end of life, but `approov-service-nsurlsession` is still published to it. To use CocoaPods instead of Swift Package Manager, create the file `iosApp/Podfile` with this content:
+
+```
+target 'iosApp' do
+    use_frameworks!
+    platform :ios, '12.0'
+    pod 'approov-service-nsurlsession', '3.5.5'
+end
+```
+
+Then change the directory to `iosApp` in your project and type:
+
+```
+pod install
+```
+
+If CocoaPods cannot find `approov-service-nsurlsession` 3.5.5, your local spec index is out of date. Run `pod install --repo-update` instead.
+
+You can ignore any warnings about `FRAMEWORK_SEARCH_PATHS`.
+
+After the pods are installed, open `iosApp/iosApp.xcworkspace` in Xcode, not `iosApp.xcodeproj`. With CocoaPods the module is named `approov_service_nsurlsession`, so write `import approov_service_nsurlsession` wherever this guide writes `import ApproovNSURLSessionObjC`.
 
 ## ENSURE THE SHAPES API IS ADDED
 
@@ -97,7 +138,7 @@ In the file `androidApp/src/main/java/io/approov/shapes/android/MainActivity.kt`
 
 ## iOS
 
-In the file `iosApp/iosApp/ContentView.swift` uncomment the line that imports `ApproovNSURLSessionObjC` and also the the lines that call `ApproovService.initialize` (filling in your actual configuration string) and subsequent lins that setup the session.
+In the file `iosApp/iosApp/ContentView.swift` uncomment the line that imports `ApproovNSURLSessionObjC` (or the `approov_service_nsurlsession` line if you use CocoaPods) and also the the lines that call `ApproovService.initialize` (filling in your actual configuration string) and subsequent lins that setup the session.
 
 ### ADD YOUR SIGNING CERTIFICATE TO APPROOV
 You should add the signing certificate used to sign apps so that Approov can recognize your app as being official.

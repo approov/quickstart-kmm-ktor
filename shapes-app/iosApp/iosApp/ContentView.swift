@@ -22,6 +22,8 @@ import UIKit
 
 //*** UNCOMMENT THE LINE BELOW TO USE APPROOV
 //import ApproovNSURLSessionObjC
+//*** OR, IF YOU USE COCOAPODS, UNCOMMENT THIS LINE INSTEAD
+//import approov_service_nsurlsession
 
 class ViewController: UIViewController {
     @IBOutlet weak var statusImageView: UIImageView!

@@ -35,7 +35,7 @@ dependencies {
 
 ### iOS
 
-The Approov integration is available via [Swift Package Manager](https://www.swift.org/documentation/package-manager/). CocoaPods is end of life, so this quickstart no longer uses it. Add the package to the `iosApp` project in Xcode:
+The Approov integration is available via [Swift Package Manager](https://www.swift.org/documentation/package-manager/). This is the recommended method. [CocoaPods](#cocoapods) is also supported. To use Swift Package Manager, add the package to the `iosApp` project in Xcode:
 
 1. Open `iosApp/iosApp.xcodeproj` in Xcode.
 2. Select `File -> Add Package Dependencies...`.
@@ -44,6 +44,30 @@ The Approov integration is available via [Swift Package Manager](https://www.swi
 5. Add the `ApproovNSURLSession` product to the `iosApp` target.
 
 This includes an open source Approov specialized version of `NSURLSession` and also the closed source [Approov SDK](https://github.com/approov/approov-ios-sdk).
+
+#### CocoaPods
+
+CocoaPods is end of life, but `approov-service-nsurlsession` is still published to it. To use CocoaPods instead of Swift Package Manager, create the file `iosApp/Podfile` with this content:
+
+```
+target 'iosApp' do
+    use_frameworks!
+    platform :ios, '12.0'
+    pod 'approov-service-nsurlsession', '3.5.5'
+end
+```
+
+Then change the directory to `iosApp` in your project and type:
+
+```
+pod install
+```
+
+If CocoaPods cannot find `approov-service-nsurlsession` 3.5.5, your local spec index is out of date. Run `pod install --repo-update` instead.
+
+You can ignore any warnings about `FRAMEWORK_SEARCH_PATHS`.
+
+After the pods are installed, open `iosApp/iosApp.xcworkspace` in Xcode, not `iosApp.xcodeproj`. With CocoaPods the module is named `approov_service_nsurlsession`, so write `import approov_service_nsurlsession` wherever this guide writes `import ApproovNSURLSessionObjC`.
 
 ## CUSTOMIZING KTOR
 
@@ -169,7 +193,7 @@ class IOSHttpClient: CustomHttpClient  {
 
 This provides a Ktor `HttpClient` that is specifically based on the `Darwin` engine. This allows a [`preconfigured`](https://ktor.io/docs/http-client-engines.html#darwin) client to be specified. This uses the Approov [`NSURLSession`](https://github.com/approov/approov-service-nsurlsession) service integration to provide the specialized `NSURLSession`. This automatically adds Approov tokens and/or substitutes secrets in requests and includes dynamic pinning.
 
-No reliable method was found to include the Approov `NSURLSession` and `SDK` Swift packages directly into the shared part of the KMM project. Instead these dependencies are included directly in the `iosApp`. Thus the session must be set using the `setSession` method of the `companion` global object. The `getDelegate` method allows the mandatory Kotlin level delegate to also be provided to the `NSURLSession` instantiation. This is necessary for the `NSURLSession` delegate mechanisms to operate correctly.
+No reliable method was found to include the Approov `NSURLSession` and `SDK` Swift packages or pods directly into the shared part of the KMM project. Instead these dependencies are included directly in the `iosApp`. Thus the session must be set using the `setSession` method of the `companion` global object. The `getDelegate` method allows the mandatory Kotlin level delegate to also be provided to the `NSURLSession` instantiation. This is necessary for the `NSURLSession` delegate mechanisms to operate correctly.
 
 ## INITIALIZING APPROOV
 
