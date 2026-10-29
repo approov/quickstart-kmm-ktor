@@ -19,7 +19,7 @@ If a method throws an `ApproovRejectionException` (a subclass of `ApproovExcepti
 On iOS this imports access to the Objective-C implementation that is called from Swift:
 
 ```Swift
-import approov_service_nsurlsession
+import ApproovNSURLSessionObjC
 ```
 
 Various methods may throw or return an `NSError` if there is a problem. The `NSError` generated contains a dictionary with the following defined keys in the `userInfo` map of the `NSError`:

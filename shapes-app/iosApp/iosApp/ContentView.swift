@@ -21,7 +21,7 @@ import shared
 import UIKit
 
 //*** UNCOMMENT THE LINE BELOW TO USE APPROOV
-//import approov_service_nsurlsession
+//import ApproovNSURLSessionObjC
 
 class ViewController: UIViewController {
     @IBOutlet weak var statusImageView: UIImageView!
