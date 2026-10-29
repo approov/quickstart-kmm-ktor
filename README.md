@@ -6,7 +6,9 @@ This page provides all the steps for integrating Approov into your app. Addition
 
 To follow this guide you should have received an onboarding email for a trial or paid Approov account.
 
-Note that the minimum OS requirement for iOS is 12 and for Android the minimum SDK version is 21 (Android 5.0).
+Note that the minimum OS requirement for iOS is 12 and for Android the minimum SDK version is 23 (Android 6.0).
+
+On Android, use Android Gradle plugin 8.1.0 or later. With earlier versions, the D8 dexer fails with `java.lang.NullPointerException: Cannot invoke "String.length()"` when it processes the service layer.
 
 ## ADDING THE APPROOV PACKAGE
 
@@ -16,15 +18,13 @@ The Approov integration is available via [`maven`](https://mvnrepository.com/rep
 Add the approov service dependency in the `shared/build.gradle.kts` to allow it to be used in the shared project as follows:
 
 ```
-val androidMain by getting {
-      dependencies {
-          ...
-          implementation("io.approov:service.okhttp:3.5.8")
-      }
+androidMain.dependencies {
+    ...
+    implementation("io.approov:service.okhttp:3.5.8")
 }
 ```
 
-You must also add the dependency in `androidMain/build.gradle.kts`:
+You must also add the dependency in `androidApp/build.gradle.kts`:
 
 ```
 dependencies {
@@ -35,25 +35,39 @@ dependencies {
 
 ### iOS
 
-The Approov integration is available via [`CocoaPods`](https://cocoapods.org/). This allows inclusion into the project by simply specifying a dependency in a `Podfile` which should be placed in `iosApp/Podfile`. Create this file if not already present and include this content using an editor:
+The Approov integration is available via [Swift Package Manager](https://www.swift.org/documentation/package-manager/). This is the recommended method. [CocoaPods](#cocoapods) is also supported. To use Swift Package Manager, add the package to the `iosApp` project in Xcode:
+
+1. Open `iosApp/iosApp.xcodeproj` in Xcode.
+2. Select `File -> Add Package Dependencies...`.
+3. Enter `https://github.com/approov/approov-service-nsurlsession.git` as the package URL.
+4. Set the `Dependency Rule` to `Exact Version` and enter `3.5.5`.
+5. Add the `ApproovNSURLSession` product to the `iosApp` target.
+
+This includes an open source Approov specialized version of `NSURLSession` and also the closed source [Approov SDK](https://github.com/approov/approov-ios-sdk).
+
+#### CocoaPods
+
+CocoaPods is end of life, but `approov-service-nsurlsession` is still published to it. To use CocoaPods instead of Swift Package Manager, create the file `iosApp/Podfile` with this content:
 
 ```
 target 'iosApp' do
     use_frameworks!
     platform :ios, '12.0'
-    pod 'approov-service-nsurlsession', '3.5.3'
+    pod 'approov-service-nsurlsession', '3.5.5'
 end
 ```
 
-This includes an open source Approov specialized version of `NSURLSession` and also the closed source [Approov SDK](https://github.com/approov/approov-ios-sdk).
-
-After creating or updating your `Podfile`, change the directory to `iosApp` in your project and type:
+Then change the directory to `iosApp` in your project and type:
 
 ```
 pod install
 ```
 
-Note that once the pods have been installed you should open the Xcode project using the generated `iosApp.xcworkspace` as this contains the generated configuration for the pods. 
+If CocoaPods cannot find `approov-service-nsurlsession` 3.5.5, your local spec index is out of date. Run `pod install --repo-update` instead.
+
+You can ignore any warnings about `FRAMEWORK_SEARCH_PATHS`.
+
+After the pods are installed, open `iosApp/iosApp.xcworkspace` in Xcode, not `iosApp.xcodeproj`. With CocoaPods the module is named `approov_service_nsurlsession`, so write `import approov_service_nsurlsession` wherever this guide writes `import ApproovNSURLSessionObjC`.
 
 ## CUSTOMIZING KTOR
 
@@ -96,12 +110,10 @@ You must then provide platform specific implementations as follows:
 You must ensure the `OkHttp` based Ktor engine is installed in the `shared/build.gradle.kts` as follows:
 
 ```
-val androidMain by getting {
-      dependencies {
-          ...
-          implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-          ...
-      }
+androidMain.dependencies {
+    ...
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    ...
 }
 ```
 
@@ -134,13 +146,10 @@ The iOS implementation is a little more complex than Android, since there is a n
 You must ensure the `Darwin` based Ktor engine is installed in the `shared/build.gradle.kts` as follows:
 
 ```
-val iosMain by ... {
+iosMain.dependencies {
     ...
-    dependencies {
-        ...
-        implementation("io.ktor:ktor-client-darwin:$ktorVersion")
-        ...
-    }
+    implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+    ...
 }
 ```
 
@@ -184,7 +193,7 @@ class IOSHttpClient: CustomHttpClient  {
 
 This provides a Ktor `HttpClient` that is specifically based on the `Darwin` engine. This allows a [`preconfigured`](https://ktor.io/docs/http-client-engines.html#darwin) client to be specified. This uses the Approov [`NSURLSession`](https://github.com/approov/approov-service-nsurlsession) service integration to provide the specialized `NSURLSession`. This automatically adds Approov tokens and/or substitutes secrets in requests and includes dynamic pinning.
 
-No reliable method was found to include the Approov `NSURLSession` and `SDK` Cocoapods directly into the shared part of the KMM project. Instead these dependencies are included directly in the `iosApp`. Thus the session must be set using the `setSession` method of the `companion` global object. The `getDelegate` method allows the mandatory Kotlin level delegate to also be provided to the `NSURLSession` instantiation. This is necessary for the `NSURLSession` delegate mechanisms to operate correctly.
+No reliable method was found to include the Approov `NSURLSession` and `SDK` Swift packages or pods directly into the shared part of the KMM project. Instead these dependencies are included directly in the `iosApp`. Thus the session must be set using the `setSession` method of the `companion` global object. The `getDelegate` method allows the mandatory Kotlin level delegate to also be provided to the `NSURLSession` instantiation. This is necessary for the `NSURLSession` delegate mechanisms to operate correctly.
 
 ## INITIALIZING APPROOV
 
@@ -207,7 +216,7 @@ ApproovService.initialize(getApplicationContext(), "<enter-your-config-string-he
 The initialization procedure on iOS is slightly more complex. You need to initialize Approov once when the app is started, somewhere in `iosApp/src`.
 
 ```Swift
-import approov_service_nsurlsession
+import ApproovNSURLSessionObjC
 
 ApproovService.initialize("<enter-your-config-string-here>", error: nil)
 let delegate = IOSHttpClient.companion.getDelegate()

@@ -21,18 +21,15 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.*
-import kotlin.native.concurrent.SharedImmutable
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
 
-@SharedImmutable
 internal expect val ApplicationDispatcher: CoroutineDispatcher
 
 interface CustomHttpClient {
     fun getClient(): HttpClient
 }
-@SharedImmutable
 internal expect val ApplicationHttpClient: CustomHttpClient
 
 @Serializable

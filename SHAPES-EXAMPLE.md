@@ -5,14 +5,30 @@ This quickstart is written specifically for Android and iOS apps that are implem
 ## WHAT YOU WILL NEED
 * Access to a trial or paid Approov account
 * The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with access to your account
-* [Android Studio](https://developer.android.com/studio) installed (version Hedgehog 2023.1.1 is used in this guide) if you will build the Android app. Note that the `ANDROID_HOME` value must be properly defined to allow building.
-* An installation of Java 11 to support the Gradle plugins used. Note that if this is not globally available then follow the instructions when first trying to build the project to change `JAVA_HOME` or edit `Settings -> Build, Execution, Deployment -> Build Tools -> Gradle` and change the use of the `Gradle JDK` to be a specific version rather than from the `gradle-wrapper.properties` file.
+* [Android Studio](https://developer.android.com/studio) installed (version Panda 2 2025.3.2 is used in this guide, and Narwhal 3 Feature Drop 2025.1.3 or later is necessary for the Android Gradle plugin 8.13 that the project uses) if you will build the Android app. Note that the `ANDROID_HOME` value must be properly defined to allow building.
+* An installation of Java 17 to support the Gradle plugins used. Note that if this is not globally available then follow the instructions when first trying to build the project to change `JAVA_HOME` or edit `Settings -> Build, Execution, Deployment -> Build Tools -> Gradle` and change the use of the `Gradle JDK` to be a specific version rather than from the `gradle-wrapper.properties` file.
 * The [`Kotlin Multiplatform Mobile Plugin`](https://kotlinlang.org/docs/multiplatform-mobile-plugin-releases.html) installed in Android Studio (version 0.8.1 was used in this guide). Amongst other things, this allows iOS apps to be launched directly from Android Studio.
-* [Xcode](https://developer.apple.com/xcode/) installed (version 15.1 is used in this guide) to build iOS version of application
-* [Cocoapods](https://cocoapods.org) installed to support iOS building (1.12.1 is used in this guide)
+* [Xcode](https://developer.apple.com/xcode/) installed (version 26.4 is used in this guide) to build iOS version of application
+* [CocoaPods](https://cocoapods.org) installed, only if you use CocoaPods instead of Swift Package Manager (1.16.2 is used in this guide)
 * An iOS device or simulator if you are using the iOS platform
 * An Android device or emulator if you are using the Android platform
 * The content of this repo
+
+### TESTED VERSIONS
+
+This guide was last tested in October 2026 with these versions:
+
+| Item | Version |
+|---|---|
+| Xcode | 26.4 (17E192) |
+| iOS simulator | iPhone 17 Pro, iOS 26.4 |
+| iOS device | iPhone 16e, iOS 27.0 |
+| `approov-service-nsurlsession` | 3.5.5 with `approov-ios-sdk` 3.5.3, through Swift Package Manager and through CocoaPods 1.16.2 |
+| `approov-service-okhttp` | 3.5.8 |
+| Kotlin | 2.2.21 |
+| Android Gradle plugin / Gradle wrapper | 8.13.2 / 8.14.6 |
+| Java | 17.0.14 |
+| Android emulator | Android 17 (API 37) |
 
 ## RUNNING THE SHAPES APP WITHOUT APPROOV
 
@@ -38,7 +54,7 @@ This checks the connectivity by connecting to the endpoint `https://shapes.appro
 
 This contacts `https://shapes.approov.io/v1/shapes` to get the name of a random shape. This endpoint is protected with an API key that is built into the code, and therefore can be easily extracted from the app.
 
-You can run on iOS either by selecting `iosApp` in the Android Studio top menu bar and running (if you have the `KMM` plugin installd in Android Studio) or by opening the `.xcproject` in Xcode and running from there. You will see a very similar app screen layout in the iOS version.
+You can run on iOS either by selecting `iosApp` in the Android Studio top menu bar and running (if you have the `KMM` plugin installd in Android Studio) or by opening `iosApp/iosApp.xcodeproj` in Xcode and running from there. You will see a very similar app screen layout in the iOS version.
 
 The subsequent steps of this guide show you how to provide better protection, either using an Approov Token or by migrating the API key to become an Approov managed secret.
 
@@ -54,33 +70,45 @@ The Approov integration is available via [`maven`](https://mvnrepository.com/rep
 
 2. The dependency to `approov-service-okhttp` also needs to be added to the `build.gradle.kts` file in the `androidApp` project. Uncomment the relevant lines.
 
-Make sure you do a Gradle sync (by selecting `Sync Now` in the banner at the top of the modified `.gradle` file) after making these changes.
+Make sure you do a Gradle sync (by selecting `Sync Now` in the banner at the top of the modified `build.gradle.kts` file) after making these changes.
 
 Note that `approov-service-okhttp` is actually an open source wrapper layer that allows you to easily use Approov with `OkHttp`. This has a further dependency to the closed source Approov SDK itself.
 
 ## iOS
 
-The Approov integration is available via [`CocoaPods`](https://cocoapods.org/). This allows inclusion into the project by simply specifying a dependency in a `Podfile` which should be placed in `iosApp/Podfile`. Create this file if not already present and include this content using an editor:
+The Approov integration is available via [Swift Package Manager](https://www.swift.org/documentation/package-manager/). This is the recommended method. [CocoaPods](#cocoapods) is also supported. To use Swift Package Manager, add the package to the `iosApp` project in Xcode:
+
+1. Open `iosApp/iosApp.xcodeproj` in Xcode.
+2. Select `File -> Add Package Dependencies...`.
+3. Enter `https://github.com/approov/approov-service-nsurlsession.git` as the package URL.
+4. Set the `Dependency Rule` to `Exact Version` and enter `3.5.5`.
+5. Add the `ApproovNSURLSession` product to the `iosApp` target.
+
+This includes an open source Approov specialized version of `NSURLSession` and also the closed source [Approov SDK](https://github.com/approov/approov-ios-sdk).
+
+#### CocoaPods
+
+CocoaPods is end of life, but `approov-service-nsurlsession` is still published to it. To use CocoaPods instead of Swift Package Manager, create the file `iosApp/Podfile` with this content:
 
 ```
 target 'iosApp' do
     use_frameworks!
     platform :ios, '12.0'
-    pod 'approov-service-nsurlsession', '3.5.3'
+    pod 'approov-service-nsurlsession', '3.5.5'
 end
 ```
 
-This includes an open source Approov specialized version of `NSURLSession` and also the closed source [Approov SDK](https://github.com/approov/approov-ios-sdk).
-
-After creating or updating your `Podfile`, change the directory to `iosApp` in your project and type:
+Then change the directory to `iosApp` in your project and type:
 
 ```
 pod install
 ```
 
+If CocoaPods cannot find `approov-service-nsurlsession` 3.5.5, your local spec index is out of date. Run `pod install --repo-update` instead.
+
 You can ignore any warnings about `FRAMEWORK_SEARCH_PATHS`.
 
-Note that once the pods have been installed you should open the Xcode project using the generated `iosApp.xcworkspace` as this contains the generated configuration for the pods. 
+After the pods are installed, open `iosApp/iosApp.xcworkspace` in Xcode, not `iosApp.xcodeproj`. With CocoaPods the module is named `approov_service_nsurlsession`, so write `import approov_service_nsurlsession` wherever this guide writes `import ApproovNSURLSessionObjC`.
 
 ## ENSURE THE SHAPES API IS ADDED
 
@@ -98,7 +126,7 @@ Shared code, both platform agnostic and specific, needs to be modified to use Ap
 
 For Android, open `shared/src/androidMain/kotlin/io/approov/shapes/CustomHttpClient.kt` and uncomment the line for the `import` and line to set the `preconfigured` engine.
 
-For iOS, open `shared/src/androidMain/kotlin/io/approov/shapes/CustomHttpClient.kt` and uncomment the lines for the `import` statements, and lines to call the `setPreconfiguredSession` and the lines associated with the `companion object`.
+For iOS, open `shared/src/iosMain/kotlin/io/approov/shapes/CustomHttpClient.kt` and uncomment the lines for the `import` statements, and lines to call the `usePreconfiguredSession` and the lines associated with the `companion object`.
 
 ## MODIFY THE APP TO USE APPROOV
 
@@ -110,7 +138,7 @@ In the file `androidApp/src/main/java/io/approov/shapes/android/MainActivity.kt`
 
 ## iOS
 
-In the file `iosApp/iosApp/ContentView.swift` uncomment the line that imports `approov_service_nsurlsession` and also the the lines that call `ApproovService.initialize` (filling in your actual configuration string) and subsequent lins that setup the session.
+In the file `iosApp/iosApp/ContentView.swift` uncomment the line that imports `ApproovNSURLSessionObjC` (or the `approov_service_nsurlsession` line if you use CocoaPods) and also the the lines that call `ApproovService.initialize` (filling in your actual configuration string) and subsequent lins that setup the session.
 
 ### ADD YOUR SIGNING CERTIFICATE TO APPROOV
 You should add the signing certificate used to sign apps so that Approov can recognize your app as being official.
