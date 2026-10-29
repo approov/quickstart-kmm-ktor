@@ -5,7 +5,7 @@ This quickstart is written specifically for Android and iOS apps that are implem
 ## WHAT YOU WILL NEED
 * Access to a trial or paid Approov account
 * The `approov` command line tool [installed](https://approov.io/docs/latest/approov-installation/) with access to your account
-* [Android Studio](https://developer.android.com/studio) installed (version Narwhal 3 Feature Drop 2025.1.3 or later is necessary for the Android Gradle plugin 8.13 that the project uses) if you will build the Android app. Note that the `ANDROID_HOME` value must be properly defined to allow building.
+* [Android Studio](https://developer.android.com/studio) installed (version Panda 2 2025.3.2 is used in this guide, and Narwhal 3 Feature Drop 2025.1.3 or later is necessary for the Android Gradle plugin 8.13 that the project uses) if you will build the Android app. Note that the `ANDROID_HOME` value must be properly defined to allow building.
 * An installation of Java 17 to support the Gradle plugins used. Note that if this is not globally available then follow the instructions when first trying to build the project to change `JAVA_HOME` or edit `Settings -> Build, Execution, Deployment -> Build Tools -> Gradle` and change the use of the `Gradle JDK` to be a specific version rather than from the `gradle-wrapper.properties` file.
 * The [`Kotlin Multiplatform Mobile Plugin`](https://kotlinlang.org/docs/multiplatform-mobile-plugin-releases.html) installed in Android Studio (version 0.8.1 was used in this guide). Amongst other things, this allows iOS apps to be launched directly from Android Studio.
 * [Xcode](https://developer.apple.com/xcode/) installed (version 26.4 is used in this guide) to build iOS version of application
